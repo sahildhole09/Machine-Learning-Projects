@@ -5,6 +5,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import (accuracy_score,confusion_matrix,classification_report)
 
 # Step 1 : Load Data
 
@@ -155,6 +157,106 @@ def DataSplitting(Border,X,Y):
 
     return X_train,X_test,Y_train,Y_test
 
+# Step 6 : Create the model
+
+#---------------------------------------------------------------
+#  Function Name : CreateModel
+#  Description :   It performs model creation
+#  Input :         None
+#  Output :        Created model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def CreateModel(Border):
+    print(Border)
+    print("Built the model")
+    print(Border)
+
+    model = DecisionTreeClassifier(max_depth=5)
+
+    print("Model gets created successfully")
+
+    return model
+
+# Step 7 : Train the model
+
+#---------------------------------------------------------------
+#  Function Name : TrainModel
+#  Description :   It performs model training
+#  Input :         Model, Training features and labels
+#  Output :        Trained model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def TrainModel(Border,model,X_train,Y_train):
+    print(Border)
+    print("Train the model")
+    print(Border)
+
+    model = model.fit(X_train,Y_train)
+
+    print("Model trained successfully")
+
+    return model
+
+# Step 8 : Test the model
+
+#---------------------------------------------------------------
+#  Function Name : TestModel
+#  Description :   It performs model testing
+#  Input :         Model, Testing features and labels
+#  Output :        Predicted Output
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def TestModel(Border,model,X_test,Y_test):
+    print(Border)
+    print("Test the model")
+    print(Border)
+
+    Y_pred = model.predict(X_test)
+
+    print("Model testing done")
+
+    print("Expected answers : ")
+    print(Y_test)
+
+    print("Predicted answers : ")
+    print(Y_pred)
+
+    return Y_pred
+
+# Step 9 : Evaluate model
+
+#---------------------------------------------------------------
+#  Function Name : EvaluateModel
+#  Description :   It calculates accuracy, confusion matrix, classification report
+#  Input :         Expected and Actual Output
+#  Output :        Accuracy, Confusion Matrix, Classification Report
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def EvaluateModel(Border,Y_test,Y_pred):
+    print(Border)
+    print("Evaluate the model performance")
+    print(Border)
+
+    accuracy = accuracy_score(Y_test,Y_pred)
+    print("Accuracy of model is : ",accuracy*100,"%")
+    print(Border)
+  
+    print("Confusion Matrix")
+    cm = confusion_matrix(Y_test,Y_pred)
+    print(cm)
+    print(Border)
+
+    print("Classification Report")
+    report = classification_report(Y_test,Y_pred)
+    print(report)
+    print(Border)
+
+    return accuracy,cm,report
+
 #---------------------------------------------------------------
 #  Function Name : main
 #  Description :   Entry point function
@@ -175,6 +277,14 @@ def main():
     DataVisualization(Border,df)
 
     X_train,X_test,Y_train,Y_test = DataSplitting(Border,X,Y)
+
+    model = CreateModel(Border)
+
+    model = TrainModel(Border,model,X_train,Y_train)
+
+    Y_pred = TestModel(Border,model,X_test,Y_test)
+
+    accuracy,cm,report = EvaluateModel(Border,Y_test,Y_pred)
 
 if __name__ == "__main__":
     main()

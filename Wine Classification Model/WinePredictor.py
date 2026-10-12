@@ -4,6 +4,8 @@
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
 
 #---------------------------------------------------------------
 #  Function Name : LoadData
@@ -116,7 +118,7 @@ def SplitData(Border,X,Y):
     print("Step 4 : Splitting the Dataset -> ")
     print(Border)
 
-    X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size=0.5,random_state=42)
+    X_train,X_test,Y_train,Y_test = train_test_split(X,Y,test_size=0.3,random_state=42)
 
     print("Dataset splitting activity done :\n")    
 
@@ -129,6 +131,106 @@ def SplitData(Border,X,Y):
     print(Border)
 
     return X_train,X_test,Y_train,Y_test
+
+#---------------------------------------------------------------
+#  Function Name : CreateModel
+#  Description :   It performs model creation
+#  Input :         None
+#  Output :        Created model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def CreateModel(Border):
+
+    print(Border)
+    print("Step 5 : Creation of a model -> ")
+    print(Border)
+
+    model = DecisionTreeClassifier(random_state=42)
+
+    print("Model is created successfully...!")
+    print(Border)
+
+    return model
+
+#---------------------------------------------------------------
+#  Function Name : TrainModel
+#  Description :   It performs model training
+#  Input :         Model, Training features and labels
+#  Output :        Trained model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def TrainModel(Border,model,X_train,Y_train):
+
+    print(Border)
+    print("Step 6 : Training of a model -> ")
+    print(Border)
+
+    model = model.fit(X_train,Y_train)
+
+    print("Model Trained Successfully...!")
+    print(Border)
+
+    return model
+
+#---------------------------------------------------------------
+#  Function Name : TestModel
+#  Description :   It performs model testing
+#  Input :         Model, Testing features and labels
+#  Output :        Predicted Output
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def TestModel(Border,model,X_test,Y_test):
+
+    print(Border)
+    print("Step 7 : Testing of a model -> ")
+    print(Border)
+
+    Y_pred = model.predict(X_test)
+
+    print("Expected Ouptput : \n")
+    print(Y_test)
+
+    print("\nPredicted Ouptput : \n")
+    print(Y_pred)
+
+    print(Border)
+
+    return Y_pred
+
+#---------------------------------------------------------------
+#  Function Name : EvaluateModel
+#  Description :   It calculates accuracy, confusion matrix, classification report
+#  Input :         Expected and Actual Output
+#  Output :        Accuracy, Confusion Matrix, Classification Report
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def EvaluateModel(Border,Y_test,Y_pred):
+
+    print(Border)
+    print("Step 8 : Evaluate the model ->")
+    print(Border)
+
+    accuracy = accuracy_score(Y_test,Y_pred)
+    print("Accuracy of model : ")
+    print(accuracy*100,"%")
+    print(Border)
+  
+    print("Confusion Matrix : ")
+    cm = confusion_matrix(Y_test,Y_pred)
+    print(cm)
+    print(Border)
+
+    print("Classification Report : ")
+    report = classification_report(Y_test,Y_pred)
+    print(report)
+
+    print(Border)
+
+    return accuracy,cm,report
 
 #---------------------------------------------------------------
 #  Function Name : main
@@ -147,7 +249,15 @@ def main():
 
     X,Y = SeperateData(Border,df)
 
-    SplitData(Border,X,Y)
+    X_train,X_test,Y_train,Y_test = SplitData(Border,X,Y)
+
+    model = CreateModel(Border)
+
+    model = TrainModel(Border,model,X_train,Y_train)
+
+    Y_pred = TestModel(Border,model,X_test,Y_test)
+
+    accuracy,cm,report = EvaluateModel(Border,Y_test,Y_pred)
 
 #---------------------------------------------------------------
 # Starter

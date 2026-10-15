@@ -6,6 +6,8 @@ import pandas as pd
 
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score,confusion_matrix,classification_report
 
 #---------------------------------------------------------------
 #  Function Name : LoadData
@@ -105,7 +107,7 @@ def SplitData(Border,X,Y):
     X_train,X_test,Y_train,Y_test = train_test_split(
     X,
     Y,
-    test_size=0.2,
+    test_size=0.3,
     random_state=42
     )
 
@@ -132,7 +134,7 @@ def SplitData(Border,X,Y):
 def ScaleData(Border,X_train,X_test):
 
     print(Border)
-    print("Step 4 : Scaling the Independent Variables")
+    print("Step 5 : Scaling the Independent Variables")
     print(Border)
 
     scalar = StandardScaler()
@@ -143,6 +145,110 @@ def ScaleData(Border,X_train,X_test):
     print(Border)
 
     return scalar,X_train,X_test
+
+#---------------------------------------------------------------
+#  Function Name : ModelCreation
+#  Description :   It performs model creation
+#  Input :         None
+#  Output :        Created model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def ModelCreation(Border):
+
+    print(Border)
+    print("Step 6 : Creating the model")
+    print(Border)
+
+    model = DecisionTreeClassifier(
+        random_state=42,
+        max_depth=5
+        )
+
+    print("Model created successfully...!")
+    print(Border)
+
+    return model
+
+#---------------------------------------------------------------
+#  Function Name : ModelTraining
+#  Description :   It performs model training
+#  Input :         Model, Training features and labels
+#  Output :        Trained model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def ModelTraining(Border,model,X_train,Y_train):
+
+    print(Border)
+    print("Step 7 : Training the model")
+    print(Border)
+
+    model = model.fit(X_train,Y_train)
+
+    print("Model trained successfully")
+    print(Border)
+
+    return model
+
+#---------------------------------------------------------------
+#  Function Name : ModelTesting
+#  Description :   It performs model testing
+#  Input :         Model, Testing features and labels
+#  Output :        Predicted Output
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def ModelTesting(Border,model,X_test,Y_test):
+
+    print(Border)
+    print("Step 8 : Testing the model")
+    print(Border)
+
+    Y_pred = model.predict(X_test)
+
+    print("Model testing done")
+
+    print("Expected answers : ")
+    print(Y_test)
+
+    print("Predicted answers : ")
+    print(Y_pred)
+
+    print(Border)
+
+    return Y_pred
+
+#---------------------------------------------------------------
+#  Function Name : ModelEvaluating
+#  Description :   It calculates accuracy, confusion matrix, classification report
+#  Input :         Expected and Actual Output
+#  Output :        Accuracy, Confusion Matrix, Classification Report
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def ModelEvaluating(Border,Y_test,Y_pred):
+
+    print(Border)
+    print("Step 9 : Evaluate the model performance")
+    print(Border)
+
+    accuracy = accuracy_score(Y_test,Y_pred)
+    print("Accuracy of model is : ",accuracy*100,"%")
+    print(Border)
+  
+    print("Confusion Matrix")
+    cm = confusion_matrix(Y_test,Y_pred)
+    print(cm)
+    print(Border)
+
+    print("Classification Report")
+    report = classification_report(Y_test,Y_pred)
+    print(report)
+
+    print(Border)
+
+    return accuracy,cm,report
 
 #---------------------------------------------------------------
 #  Function Name : main
@@ -164,6 +270,18 @@ def main():
     X_train,X_test,Y_train,Y_test = SplitData(Border,X,Y)
 
     scalar,X_train,X_test = ScaleData(Border,X_train,X_test)
+
+    model = ModelCreation(Border)
+
+    model = ModelTraining(Border,model,X_train,Y_train)
+
+    Y_pred = ModelTesting(Border,model,X_test,Y_test)
+
+    accuracy,cm,report = ModelEvaluating(Border,Y_test,Y_pred)
+
+#---------------------------------------------------------------
+# Starter
+#---------------------------------------------------------------
 
 if __name__ == "__main__":
     main()

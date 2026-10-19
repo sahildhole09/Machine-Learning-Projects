@@ -127,7 +127,7 @@ def SplitData(Border,X,Y):
 #  Function Name : ScaleData
 #  Description :   It performs Scaling of Independent Variables
 #  Input :         Data Frame
-#  Output :        4 subsets for training and testing
+#  Output :        Scalar Object & Scaled training and testing Independent Variables
 #  Author :        Sahil Ashok Dhole
 #---------------------------------------------------------------
 

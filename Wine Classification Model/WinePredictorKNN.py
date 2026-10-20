@@ -145,6 +145,63 @@ def ScaleData(border,X_train,X_test):
     return scalar,X_train_scaled,X_test_scaled
 
 #---------------------------------------------------------------
+#  Function Name : HyperparameterTuning
+#  Description :   It calculates the accuracies according to the k values
+#  Input :         Independent & Dependent Variables
+#  Output :        Model,Values of k and the accuracy scores 
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def HyperparameterTuning(border,X_train_scaled,Y_train,X_test_scaled,Y_test):
+
+    print(border)
+    print("Step 6 : Hyperparameter Tuning of the k values")
+    print(border)
+
+    accuracy_scores = []
+    K_values = range(1,21)
+
+    for k in K_values:
+        model = KNeighborsClassifier(n_neighbors = k)
+
+        model = model.fit(X_train_scaled,Y_train)
+        Y_pred = model.predict(X_test_scaled)
+        accuracy = accuracy_score(Y_test,Y_pred)
+        accuracy_scores.append(accuracy)
+
+    print("Accuracy report : ")
+    for no in accuracy_scores:
+        print(no)
+
+    print(border)
+
+    return model,K_values,accuracy_scores
+
+#---------------------------------------------------------------
+#  Function Name : VisualizeData
+#  Description :   It is used to visualize the dataset
+#  Input :         Values of k and accuracy scores
+#  Output :        Graphical Representation of accuracy according to k values
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def VisualizeData(border,K_values,accuracy_scores):
+
+    print(border)
+    print("Step 7 : Graphical Representation")
+    print(border)
+
+    plt.figure(figsize=(8,5))
+    plt.plot(K_values,accuracy_scores,marker = "o")
+    plt.title("K Values vs Accuracy")
+    plt.xlabel("Value of K")
+    plt.ylabel("Accuracy")
+    plt.grid(True)
+    plt.xticks(list(K_values))
+    plt.show()
+
+
+#---------------------------------------------------------------
 #  Function Name : main
 #  Description :   Entry point function
 #  Input :         None
@@ -166,6 +223,10 @@ def main():
     X_train,X_test,Y_train,Y_test = SplitData(border,X,Y)
 
     scalar,X_train_scaled,X_test_scaled = ScaleData(border,X_train,X_test)
+
+    model,K_values,accuracy_scores = HyperparameterTuning(border,X_train_scaled,Y_train,X_test_scaled,Y_test)
+
+    VisualizeData(border,K_values,accuracy_scores)
 
 #---------------------------------------------------------------
 # Starter

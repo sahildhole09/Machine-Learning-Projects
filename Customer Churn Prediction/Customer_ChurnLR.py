@@ -208,41 +208,26 @@ def EvaluateModel(Border,Y_test,Y_pred):
     print(Border)
 
     return accuracy,cm,report
+
 #---------------------------------------------------------------
-#  Function Name : NewRecord
-#  Description :   It predicts the output of new customer 
-#  Input :         model
-#  Output :        prediction
+#  Function Name : PreserveModel
+#  Description :   It preserves the created / evaluated model
+#  Input :         Model
+#  Output :        .pkl file of preserved model
 #  Author :        Sahil Ashok Dhole
 #---------------------------------------------------------------
 
-def NewRecord(Border,model):
-
+def PreserveModel(Border,model):
     print(Border)
-    print("Prediction of New Customer")
-    print(Border)
-
-    age = int(input("Enter your age : "))
-    tenure = int(input("\nEnter your tenure : "))
-    charges = int(input("\nEnter your charges : "))
-    calls = int(input("\nEnter your calls : "))
-
-    new_customer = pd.DataFrame({
-    "Age" : [age],
-    "Tenure" : [tenure],
-    "MonthlyCharges" : [charges],
-    "SupportCalls" : [calls]
-    })
-
-    prediction = model.predict(new_customer)
-
-    if prediction[0] == 1:
-        print("\nPrediction : Customer is likely to churn")
-    else:
-        print("\nPrediction : Customer is unlikely to churn")
-
+    print("Preserve the model")
     print(Border)
 
+    joblib.dump(model,"Customer_Churn.pkl")
+
+    print("Model saved successfully...")
+
+    print(Border)
+    
 #---------------------------------------------------------------
 #  Function Name : main
 #  Description :   Entry point function
@@ -270,7 +255,7 @@ def main():
 
     accuracy,cm,report = EvaluateModel(Border,Y_test,Y_pred)
 
-    NewRecord(Border,model)
+    PreserveModel(Border,model)
 
 #---------------------------------------------------------------
 # Starter

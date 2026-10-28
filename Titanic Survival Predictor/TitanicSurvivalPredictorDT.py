@@ -3,7 +3,12 @@
 #---------------------------------------------------------------
 
 import pandas as pd
+
 from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+
+import joblib
 
 #---------------------------------------------------------------
 #  Function Name : LoadData
@@ -27,7 +32,6 @@ def LoadData(filename):
 #  Input :         Data Frame
 #  Output :        Updated Data Frame
 #  Author :        Sahil Ashok Dhole
-#  Date :          16/08/2026
 #---------------------------------------------------------------
 
 def PreprocessData(df):
@@ -64,7 +68,6 @@ def PreprocessData(df):
 #  Input :         Data Frame
 #  Output :        4 subsets for training and testing
 #  Author :        Sahil Ashok Dhole
-#  Date :          16/08/2026
 #---------------------------------------------------------------
 
 def SplitData(df):
@@ -82,12 +85,64 @@ def SplitData(df):
     return X_train,X_test,Y_train,Y_test
 
 #---------------------------------------------------------------
+#  Function Name : TrainModel
+#  Description :   It performs model training
+#  Input :         Training features and labels
+#  Output :        Trained model
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def TrainModel(X_train,Y_train):
+    model = LogisticRegression(max_iter=1000)
+
+    model = model.fit(X_train,Y_train)
+
+    print("Trained model successfully...")
+
+    return model
+
+#---------------------------------------------------------------
+#  Function Name : EvaluateModel
+#  Description :   It performs model testing
+#  Input :         model,testing data(features,labels)
+#  Output :        none
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def EvaluateModel(model,X_test,Y_test):
+    Y_pred = model.predict(X_test)
+
+    accuracy = accuracy_score(Y_test,Y_pred)
+
+    print("Accuracy : ",accuracy)
+
+    print("Confusion Matrix : ")
+
+    print(confusion_matrix(Y_test,Y_pred))
+
+    print("Classification Report : ")
+
+    print(classification_report(Y_test,Y_pred))
+
+#---------------------------------------------------------------
+#  Function Name : PreserveModel
+#  Description :   It performs model preservation into .pkl file
+#  Input :         model
+#  Output :        None
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def PreserveModel(model,filename):
+    joblib.dump(model,filename)
+
+    print("Model preserved with name : ",filename)
+
+#---------------------------------------------------------------
 #  Function Name : main
 #  Description :   Entry point function
 #  Input :         None
 #  Output :        None
 #  Author :        Sahil Ashok Dhole
-#  Date :          16/08/2026
 #---------------------------------------------------------------
 
 def main():
@@ -96,6 +151,12 @@ def main():
     df = PreprocessData(df)
 
     X_train,X_test,Y_train,Y_test = SplitData(df)
+
+    model = TrainModel(X_train,Y_train)
+
+    EvaluateModel(model,X_test,Y_test)
+
+    PreserveModel(model,"MarvellousTitanic.pkl")
 
 #---------------------------------------------------------------
 # Starter

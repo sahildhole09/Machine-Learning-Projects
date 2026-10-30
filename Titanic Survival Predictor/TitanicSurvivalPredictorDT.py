@@ -5,7 +5,7 @@
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
 
 import joblib
@@ -93,7 +93,7 @@ def SplitData(df):
 #---------------------------------------------------------------
 
 def TrainModel(X_train,Y_train):
-    model = LogisticRegression(max_iter=1000)
+    model = DecisionTreeClassifier(random_state=42)
 
     model = model.fit(X_train,Y_train)
 

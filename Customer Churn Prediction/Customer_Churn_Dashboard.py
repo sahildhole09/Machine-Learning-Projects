@@ -1,3 +1,4 @@
+import os
 import streamlit as st
 import pandas as pd
 import joblib
@@ -15,6 +16,8 @@ st.caption("Interactive Machine Learning Application for Customer Retention Anal
 st.divider()
 
 model = joblib.load("Customer_Churn.pkl")
+MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Customer_Churn.pkl")
+model = joblib.load(MODEL_PATH)
 
 col_input, col_result = st.columns([1, 1], gap="medium")
 

@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.metrics import (mean_squared_error,r2_score)
+import joblib
 
 #---------------------------------------------------------------
 #  Function Name : DataLoading
@@ -195,6 +196,54 @@ def EvaluateModel(Border,Y_test,Y_pred):
     return MSE, R2_SCORE
 
 #---------------------------------------------------------------
+#  Function Name : NewPrediction
+#  Description :   It predicts the new house price
+#  Input :         Trained Model
+#  Output :        New House Price Predicted Result 
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def NewPrediction(Border,model):
+    print(Border)
+    print("Prediction Price of New House")
+    print(Border)
+
+    new_prediction = pd.DataFrame({
+        "MedInc" : [3.5000],
+        "HouseAge" : [35.0],
+        "AveRooms" : [5.2000],
+        "AveBedrms" : [1.0500],
+        "Population" : [1200.0],
+        "AveOccup" : [2.8000],
+        "Latitude" : [37.80],
+        "Longitude" : [-122.24]
+        })
+    
+    new_pred = model.predict(new_prediction)
+
+    print("Predicted House Price : ",new_pred)
+
+    print(Border)
+
+#---------------------------------------------------------------
+#  Function Name : PreserveModel
+#  Description :   It performs model preservation into .pkl file 
+#  Input :         Trained Model
+#  Output :        None
+#  Author :        Sahil Ashok Dhole
+#---------------------------------------------------------------
+
+def PreserveModel(Border,model,filename):
+    print(Border)
+    print("Preserve the Model")
+    print(Border)
+
+    joblib.dump(model,filename)
+
+    print("Model preserved with name : ",filename)
+    print(Border)
+
+#---------------------------------------------------------------
 #  Function Name : main
 #  Description :   Entry point function
 #  Input :         None
@@ -220,6 +269,10 @@ def main():
     Y_pred = TestModel(Border,model,X_test,Y_test)
 
     MSE, R2_SCORE = EvaluateModel(Border,Y_test,Y_pred)
+
+    NewPrediction(Border,model)
+
+    PreserveModel(Border,model,"CalHousePricePredModel.pkl")
 
 #---------------------------------------------------------------
 # Application Starter

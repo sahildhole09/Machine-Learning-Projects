@@ -83,3 +83,147 @@ def TrainModel(model_name):
 
 model, X_test, Y_test, Y_pred = TrainModel(model_name)
 
+if choice == "Home":
+
+    st.header("Welcome to California House Price Prediction")
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Total Records", len(df))
+
+    col2.metric("Total Features", len(X.columns))
+
+    col3.metric("Selected Model", model_name)
+
+    st.subheader("Dataset Preview")
+
+    st.dataframe(df.head(10), use_container_width=True)
+
+elif choice == "Data Analysis":
+
+    st.header("Data Analysis")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.subheader("Dataset Shape")
+        st.write(df.shape)
+
+        st.subheader("Column Names")
+        st.write(list(df.columns))
+
+    with col2:
+        st.subheader("Missing Values")
+        st.dataframe(df.isnull().sum())
+
+    st.subheader("Statistical Report")
+
+    st.dataframe(df.describe(), use_container_width=True)
+
+elif choice == "Data Visualization":
+
+    st.header("Data Visualization")
+
+    st.subheader("1. House Price Distribution")
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+
+    sns.histplot(
+        df["target"],
+        bins=40,
+        kde=True,
+        ax=ax
+    )
+
+    ax.set_xlabel("House Price (units of $100,000)")
+    ax.set_ylabel("Frequency")
+
+    st.pyplot(fig)
+    plt.close(fig)
+
+    st.subheader("2. Correlation Heatmap")
+
+    fig, ax = plt.subplots(figsize=(10, 7))
+
+    sns.heatmap(
+        df.corr(numeric_only=True),
+        annot=True,
+        cmap="coolwarm",
+        fmt=".2f",
+        ax=ax
+    )
+
+    st.pyplot(fig)
+    plt.close(fig)
+
+    st.subheader("3. Median Income vs House Price")
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+
+    sns.scatterplot(
+        data=df.sample(min(3000, len(df)), random_state=42),
+        x="MedInc",
+        y="target",
+        alpha=0.5,
+        ax=ax
+    )
+
+    st.pyplot(fig)
+    plt.close(fig)
+
+    st.subheader("4. Actual vs Predicted House Prices")
+
+    fig, ax = plt.subplots(figsize=(9, 5))
+
+    sns.scatterplot(
+        x=Y_test,
+        y=Y_pred,
+        alpha=0.5,
+        ax=ax
+    )
+
+    ax.plot(
+        [Y_test.min(), Y_test.max()],
+        [Y_test.min(), Y_test.max()],
+        color="red",
+        linestyle="--"
+    )
+
+    ax.set_xlabel("Actual Price")
+    ax.set_ylabel("Predicted Price")
+
+    st.pyplot(fig)
+    plt.close(fig)
+
+    st.subheader("5. Feature Importance")
+
+    if hasattr(model, "feature_importances_"):
+
+        importance = pd.DataFrame({
+            "Feature": X.columns,
+            "Importance": model.feature_importances_
+        }).sort_values(
+            by="Importance",
+            ascending=False
+        )
+
+        fig, ax = plt.subplots(figsize=(9, 5))
+
+        sns.barplot(
+            data=importance,
+            x="Importance",
+            y="Feature",
+            ax=ax
+        )
+
+        st.pyplot(fig)
+        plt.close(fig)
+
+    else:
+
+        st.info(
+            "Feature importance visualization is available "
+            "for Decision Tree only."
+        )
+
+        

@@ -226,4 +226,124 @@ elif choice == "Data Visualization":
             "for Decision Tree only."
         )
 
-        
+elif choice == "Model Training":
+
+    st.header("Model Training and Evaluation")
+
+    MSE = mean_squared_error(Y_test, Y_pred)
+
+    RMSE = np.sqrt(MSE)
+
+    R2_SCORE = r2_score(Y_test, Y_pred)
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Mean Squared Error", round(MSE, 4))
+
+    col2.metric("Root Mean Squared Error", round(RMSE, 4))
+
+    col3.metric("R2 Score", round(R2_SCORE, 4))
+
+    st.subheader("Expected vs Predicted Values")
+
+    result = pd.DataFrame({
+        "Actual Values": Y_test.values,
+        "Predicted Values": Y_pred
+    })
+
+    st.dataframe(result.head(20), use_container_width=True)
+
+elif choice == "New Prediction":
+
+    st.header("Predict New House Price")
+
+    st.write("Enter the house details below.")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+
+        MedInc = st.number_input(
+            "Median Income",
+            min_value=0.0,
+            value=3.5
+        )
+
+        HouseAge = st.number_input(
+            "House Age",
+            min_value=0.0,
+            value=35.0
+        )
+
+        AveRooms = st.number_input(
+            "Average Rooms",
+            min_value=0.0,
+            value=5.2
+        )
+
+        AveBedrms = st.number_input(
+            "Average Bedrooms",
+            min_value=0.0,
+            value=1.05
+        )
+
+    with col2:
+
+        Population = st.number_input(
+            "Population",
+            min_value=0.0,
+            value=1200.0
+        )
+
+        AveOccup = st.number_input(
+            "Average Occupancy",
+            min_value=0.0,
+            value=2.8
+        )
+
+        Latitude = st.number_input(
+            "Latitude",
+            min_value=32.0,
+            max_value=42.0,
+            value=37.80
+        )
+
+        Longitude = st.number_input(
+            "Longitude",
+            min_value=-125.0,
+            max_value=-114.0,
+            value=-122.24
+        )
+
+    if st.button("Predict House Price"):
+
+        new_prediction = pd.DataFrame({
+
+            "MedInc": [MedInc],
+            "HouseAge": [HouseAge],
+            "AveRooms": [AveRooms],
+            "AveBedrms": [AveBedrms],
+            "Population": [Population],
+            "AveOccup": [AveOccup],
+            "Latitude": [Latitude],
+            "Longitude": [Longitude]
+
+        })
+
+        new_pred = model.predict(new_prediction)
+
+        house_price = new_pred[0] * 100000
+
+        st.success("House Price Predicted Successfully!")
+
+        st.metric(
+            "Predicted House Price",
+            f"${house_price:,.2f}"
+        )
+
+st.divider()
+
+st.caption(
+    "California House Price Prediction | "
+    "Developed using Python, Scikit-learn and Streamlit"
+)

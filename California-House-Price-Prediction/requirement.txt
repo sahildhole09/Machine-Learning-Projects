@@ -120,6 +120,7 @@ schedule==1.2.2
 scikit-fuzzy==0.5.0
 scikit-learn==1.8.0
 scipy==1.16.3
+matplotlib==3.11.2
 seaborn==0.13.2
 Send2Trash==2.1.0
 setuptools==84.0.0

@@ -110,6 +110,88 @@ def FeatureScaling(Border,X):
     return X_scaled
 
 #------------------------------------------------------------
+#  Function Name : ElbowMethod
+#  Description   : It calculates the WCSS
+#  Input         : Scaled Feature
+#  Output        : Values of WCSS
+#  Author        : Sahil Ashok Dhole
+#------------------------------------------------------------
+
+def ElbowMethod(Border,X_scaled):
+    print(Border)
+    print("Elbow Method")
+    print(Border)
+
+    WCSS = []
+
+    for k in range(1,11):
+        model = KMeans(
+            n_clusters=k,
+            random_state=42,
+            n_init=10
+            )
+        
+        model.fit(X_scaled)
+
+        WCSS.append(model.inertia_)
+
+    print("Values of WCSS : ")
+    for i in range(len(WCSS)):
+        print(f"{i+1} : {WCSS[i]}")
+
+    return WCSS
+
+#------------------------------------------------------------
+#  Function Name : DataVisualization
+#  Description   : It visualizes the Elbow Method
+#  Input         : WCSS
+#  Output        : None
+#  Author        : Sahil Ashok Dhole
+#------------------------------------------------------------
+
+def DataVisualization(Border,WCSS):
+    print(Border)
+    print("Visualization of Elbow Method")
+    print(Border)
+
+    plt.plot(range(1,11),WCSS,marker="o")
+    plt.xlabel("Number of Clusters : k")
+    plt.ylabel("WCSS")
+    plt.title("Elbow Method")
+    plt.grid(True)
+    plt.show()
+
+#------------------------------------------------------------
+#  Function Name : FinalModel
+#  Description   : It performs model training & prediction of clusters
+#  Input         : Scaled Feature, dataframe
+#  Output        : Dataframe consist of predicted Cluster column
+#  Author        : Sahil Ashok Dhole
+#------------------------------------------------------------
+
+def FinalModel(Border,X_scaled,df):
+    print(Border)
+    print("Final Model")
+    print(Border)
+
+    model = KMeans(
+            n_clusters=4,
+            random_state=42,
+            n_init=10
+            )
+    
+    clusters = model.fit_predict(X_scaled)
+
+    df["Cluster"] = clusters
+
+    print("Dataset with clusters : ")
+    print(df.head(100))
+
+    print(Border)
+
+    return df
+
+#------------------------------------------------------------
 #  Function Name : main
 #  Description   : Entry point function
 #  Input         : None
@@ -127,6 +209,12 @@ def main():
     X = FeatureSelection(Border,df)
 
     X_scaled = FeatureScaling(Border,X)
+
+    WCSS = ElbowMethod(Border,X_scaled)
+
+    DataVisualization(Border,WCSS)
+
+    FinalModel(Border,X_scaled,df)
 
 #------------------------------------------------------------
 # Application Starter

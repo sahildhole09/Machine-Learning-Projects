@@ -84,3 +84,44 @@ ax2.grid()
 st.pyplot(fig2)
 
 st.success("Customer Segmentation Completed Successfully!")
+
+st.subheader("📋 Cluster Analysis")
+
+summary = df.groupby("Cluster").agg({
+    "CustomerID": "count",
+    "AnnualIncome": "mean",
+    "SpendingScore": "mean"
+})
+
+summary.columns = [
+    "Total Customers",
+    "Average Income",
+    "Average Spending"
+]
+
+st.dataframe(summary.round(2))
+
+st.subheader("👥 Customer Details")
+
+selected = st.selectbox(
+    "Select Customer Group",
+    ["All Groups"] + list(range(k))
+)
+
+if selected == "All Groups":
+    result = df
+else:
+    result = df[df["Cluster"] == selected]
+
+st.dataframe(result, use_container_width=True)
+
+st.subheader("⬇️ Download Results")
+
+csv = df.to_csv(index=False)
+
+st.download_button(
+    "Download Customer Data",
+    csv,
+    "Customer_Segmentation.csv",
+    "text/csv"
+)

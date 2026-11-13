@@ -155,7 +155,7 @@ def ScaleData(Border,X_train,X_test):
 #  Function Name : IndividualModelsCreation
 #  Description :   It performs individual models creation
 #  Input :         None
-#  Output :        Created base model
+#  Output :        Created individual models
 #  Author :        Sahil Ashok Dhole
 #---------------------------------------------------------------
 
@@ -178,9 +178,9 @@ def IndividualModelsCreation(Border):
 
 #---------------------------------------------------------------
 #  Function Name : VotingModelCreation
-#  Description :   It performs Bagging model creation
-#  Input :         Base model
-#  Output :        Created bagging model
+#  Description :   It performs Voting model creation
+#  Input :         Individual models
+#  Output :        Created voting model
 #  Author :        Sahil Ashok Dhole
 #---------------------------------------------------------------
 

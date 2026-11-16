@@ -77,3 +77,59 @@ page = st.sidebar.radio(
     "Navigation",
     ["Dashboard", "Prediction", "Model Performance", "Dataset"]
 )
+
+if page == "Dashboard":
+    st.subheader("Project Overview")
+    c1, c2, c3 = st.columns(3)
+    c1.metric("Total Records", len(df))
+    c2.metric("Input Features", len(df.columns) - 1)
+    c3.metric("Models Available", len(trained_models))
+
+    st.subheader("Target Class Distribution")
+    counts = df["target"].map({0: "Malignant", 1: "Benign"}).value_counts()
+    st.bar_chart(counts)
+
+    st.info("Select Prediction to enter feature values and get a model result.")
+
+elif page == "Prediction":
+    st.subheader("Make a Prediction")
+    selected_model = st.selectbox("Select Model", list(trained_models.keys()))
+    model_info = trained_models[selected_model]
+
+    st.write("Enter the 30 feature values:")
+    values = {}
+    features = model_info["features"]
+    defaults = df[features].median()
+
+    cols = st.columns(3)
+    for i, feature in enumerate(features):
+        with cols[i % 3]:
+            values[feature] = st.number_input(
+                feature,
+                value=float(defaults[feature]),
+                format="%.5f",
+                key=f"{selected_model}_{feature}"
+            )
+
+    if st.button("Predict", type="primary"):
+        input_df = pd.DataFrame([values], columns=features)
+        scaled_input = model_info["scaler"].transform(input_df)
+        prediction = model_info["model"].predict(scaled_input)[0]
+
+        if prediction == 0:
+            st.error("Prediction: Malignant")
+        else:
+            st.success("Prediction: Benign")
+
+        if hasattr(model_info["model"], "predict_proba"):
+            probabilities = model_info["model"].predict_proba(scaled_input)[0]
+            probability_df = pd.DataFrame(
+                {"Class": ["Malignant", "Benign"], "Probability": probabilities}
+            ).set_index("Class")
+            st.subheader("Prediction Probability")
+            st.bar_chart(probability_df)
+
+        st.warning(
+            "This application is for educational purposes only. "
+            "It is not a medical diagnosis. Consult a qualified healthcare professional."
+        )

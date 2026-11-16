@@ -140,7 +140,7 @@ def ScaleData(Border,X_train,X_test):
     scalar = StandardScaler()
 
     X_train = scalar.fit_transform(X_train)
-    X_test = scalar.fit_transform(X_test)
+    X_test = scalar.transform(X_test)
 
     print(Border)
 

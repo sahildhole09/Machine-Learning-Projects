@@ -133,3 +133,34 @@ elif page == "Prediction":
             "This application is for educational purposes only. "
             "It is not a medical diagnosis. Consult a qualified healthcare professional."
         )
+
+elif page == "Model Performance":
+    st.subheader("Model Accuracy Comparison")
+    accuracy_df = pd.DataFrame({
+        "Model": list(trained_models.keys()),
+        "Accuracy (%)": [
+            trained_models[name]["accuracy"] * 100 for name in trained_models
+        ]
+    }).set_index("Model")
+    st.bar_chart(accuracy_df)
+
+    selected = st.selectbox("View Confusion Matrix", list(trained_models.keys()))
+    cm = trained_models[selected]["confusion_matrix"]
+    cm_df = pd.DataFrame(
+        cm,
+        index=["Actual Malignant", "Actual Benign"],
+        columns=["Predicted Malignant", "Predicted Benign"]
+    )
+    st.write(f"**{selected} — Confusion Matrix**")
+    st.dataframe(cm_df, use_container_width=True)
+    st.write("**Classification Report**")
+    st.text(trained_models[selected]["report"])
+
+elif page == "Dataset":
+    st.subheader("Dataset Overview")
+    st.write("Dataset shape:", df.shape)
+    st.dataframe(df.head(20), use_container_width=True)
+    st.subheader("Missing Values")
+    st.dataframe(df.isnull().sum().rename("Missing Values"))
+    st.subheader("Summary Statistics")
+    st.dataframe(df.describe(), use_container_width=True)

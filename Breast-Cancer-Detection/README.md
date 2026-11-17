@@ -1,133 +1,119 @@
-# Breast Cancer Detection Using Decision Tree
+# Breast Cancer Detection System
 
-A machine learning project that uses a **Decision Tree Classifier** to
-classify breast cancer data from a CSV dataset. The Python script loads
-and explores the dataset, separates features and target labels, splits
-the data into training and testing sets, scales the features, trains a
-model, and reports evaluation metrics.
+A machine learning project that classifies breast-cancer dataset records into **Malignant** or **Benign** classes. It includes multiple classification algorithms and a Streamlit web interface for predictions, dataset exploration, and model-performance comparison.
 
-## Project Structure
+## 1. Project Overview
 
-``` text
-Breast-Cancer-Detection/
-├── BreastCancerDetectionDT.py
-├── breast_cancer.csv
-├── README.md
-└── requirements.txt
+The project uses numerical measurements from the breast cancer dataset to train machine learning classification models. The Streamlit application allows users to select a model, enter feature values, and view the predicted class.
+
+The supplied dataset contains **569 records**, **30 input features**, and one target column (`target`).
+
+- `target = 0` — Malignant
+- `target = 1` — Benign
+
+## 2. Features
+
+- Interactive Streamlit dashboard.
+- Prediction using a selected machine learning model.
+- Comparison of model accuracy.
+- Confusion matrix and classification report.
+- Dataset preview and missing-value overview.
+- Target-class distribution chart.
+- Prediction probabilities when supported by the selected model.
+
+## 3. Machine Learning Models
+
+The project contains implementations of:
+
+| Model | Technique |
+|---|---|
+| Decision Tree | Tree-based classification |
+| K-Nearest Neighbors (KNN) | Neighbor-based classification |
+| Logistic Regression | Linear classification |
+| Bagging | Ensemble learning with a Decision Tree base estimator |
+| AdaBoost | Boosting ensemble |
+| Hard Voting | Combines Logistic Regression, Decision Tree, and KNN predictions |
+| Soft Voting | Combines class probabilities from Logistic Regression, Decision Tree, and KNN |
+| Random Forest | Tree-based ensemble |
+
+**Note:** The Streamlit application currently loads and compares seven models: Decision Tree, KNN, Logistic Regression, Bagging, AdaBoost, Hard Voting, and Soft Voting. The Random Forest script is included as a separate model file but is not imported into the current Streamlit interface.
+
+## 4. Technologies Used
+
+- Python
+- Pandas and NumPy
+- Scikit-learn
+- Streamlit
+- Matplotlib
+
+## 5. Project Files
+
+| File | Description |
+|---|---|
+| `breast_cancer.csv` | Dataset used for model training and prediction |
+| `BreastCancerDetectionDT.py` | Decision Tree implementation |
+| `BreastCancerDetectionKNN.py` | KNN implementation |
+| `BreastCancerDetectionLR.py` | Logistic Regression implementation |
+| `BreastCancerBagging.py` | Bagging implementation |
+| `BreastCancerBoosting.py` | AdaBoost implementation |
+| `BreastCancerHardVoting.py` | Hard Voting implementation |
+| `BreastCancerSoftVoting.py` | Soft Voting implementation |
+| `BreastCancerRandomForest.py` | Random Forest implementation |
+| `BreastCancerDetectionStreamlit.py` | Main Streamlit application |
+| `requirements.txt` | Python package dependencies |
+
+## 6. Installation
+
+1. Install Python.
+2. Download or clone this project.
+3. Open a terminal in the project folder.
+4. (Recommended) Create and activate a virtual environment:
+
+   ```bash
+   python -m venv venv
+   ```
+
+   **Windows:**
+   ```bash
+   venv\Scripts\activate
+   ```
+
+   **macOS/Linux:**
+   ```bash
+   source venv/bin/activate
+   ```
+
+5. Install the dependencies:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+## 7. How to Run
+
+Keep the CSV file and Python files in the same project folder. Then run:
+
+```bash
+streamlit run BreastCancerDetectionStreamlit.py
 ```
 
-## Features
+The application will open in your browser. Use the sidebar to navigate between **Dashboard**, **Prediction**, **Model Performance**, and **Dataset**.
 
--   Loads the dataset from `breast_cancer.csv` using Pandas.
--   Displays the dataset shape, first few rows, column names,
-    missing-value counts, target distribution, and descriptive
-    statistics.
--   Separates independent variables (`X`) from the dependent variable
-    (`target`).
--   Splits the data into training and testing sets using a 70/30 split.
--   Scales feature values with `StandardScaler`.
--   Trains a `DecisionTreeClassifier` with `max_depth=5` and
-    `random_state=42`.
--   Evaluates predictions using accuracy, a confusion matrix, and a
-    classification report.
+## 8. How the Project Works
 
-## Requirements
+1. Load the breast cancer dataset.
+2. Examine the dataset and target distribution.
+3. Separate the input features (`X`) and target (`Y`).
+4. Split the data into training and testing sets.
+5. Scale the input features using `StandardScaler`.
+6. Create and train the selected machine learning models.
+7. Evaluate predictions using accuracy, confusion matrix, and classification report.
+8. Use the Streamlit interface to make predictions and explore results.
 
--   Python 3.8 or newer recommended
--   pandas
--   scikit-learn
+## 9. Important Note
 
-## Installation
+This project is intended for **learning and educational purposes only**. Its predictions are not a medical diagnosis and must not be used to make healthcare decisions. Always consult a qualified healthcare professional for medical advice.
 
-1.  Install Python if it is not already installed.
-
-2.  Place `BreastCancerDetectionDT.py` and `breast_cancer.csv` in the
-    same directory.
-
-3.  Open a terminal in that directory.
-
-4.  Install the required packages:
-
-    ``` bash
-    pip install pandas scikit-learn
-    ```
-
-## Dataset
-
-The script expects a file named **`breast_cancer.csv`** in the current
-working directory. It expects the dataset to contain a column named
-**`target`**. All other columns are used as input features.
-
-The code prints the dataset dimensions, sample records, missing values,
-target-class counts, and summary statistics before training.
-
-## How to Run
-
-Run the script from the directory containing both files:
-
-``` bash
-python BreastCancerDetectionDT.py
-```
-
-The program runs the following workflow:
-
-1.  Load the CSV dataset.
-2.  Perform basic exploratory data analysis.
-3.  Split the dataset into features (`X`) and target labels (`Y`).
-4.  Split the data into training and testing sets (`test_size=0.3`,
-    `random_state=42`).
-5.  Standardize the feature values.
-6.  Create the Decision Tree model.
-7.  Train the model.
-8.  Predict labels for the test set.
-9.  Print the evaluation results.
-
-## Model Configuration
-
-  Setting                   Value
-  ------------------------- --------------------------
-  Algorithm                 Decision Tree Classifier
-  Maximum tree depth        `5`
-  Random state              `42`
-  Test set proportion       `30%`
-  Training set proportion   `70%`
-  Feature scaler            `StandardScaler`
-
-## Evaluation Metrics
-
-The script reports:
-
--   **Accuracy:** the proportion of test examples classified correctly.
--   **Confusion matrix:** compares actual and predicted class labels.
--   **Classification report:** displays precision, recall, F1-score, and
-    support for each class.
-
-The actual results depend on the dataset and the execution environment;
-no fixed accuracy is claimed here.
-
-## Important Implementation Note
-
-In the current script, `StandardScaler` is fitted separately to both the
-training and test data. For a more reliable evaluation, fit the scaler
-only on the training data and use that fitted scaler to transform the
-test data:
-
-``` python
-scaler = StandardScaler()
-X_train = scaler.fit_transform(X_train)
-X_test = scaler.transform(X_test)
-```
-
-This avoids using test-set statistics during preprocessing. Also,
-because this is a medical-related classification project, its
-predictions are for educational purposes only and must **not** be used
-as a substitute for professional medical diagnosis or advice.
-
-## Author
+## 10. Author
 
 **Sahil Ashok Dhole**
-
-## License
-
-No license is specified in the provided project files. Add a `LICENSE`
-file if you intend to distribute the project with a particular license.
